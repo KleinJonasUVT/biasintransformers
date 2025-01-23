@@ -9,3 +9,4 @@ This repository contains the code and analysis for my Data Science & Society the
 - **Analysis**: Analyzing the evolution and localization of gender bias in embeddings.
 - **Evaluation**: Visualizations and results documenting embedding behaviors and gender localization.
 
+![Data Pipeline](assets/images/DataPipeline.png)
