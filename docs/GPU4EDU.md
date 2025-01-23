@@ -1,4 +1,5 @@
-#[How to use GPU4EDU](https://ilk.uvt.nl/~shterion/gpu4edu.html)
+# How to use GPU4EDU
+[Website with full explanation](https://ilk.uvt.nl/~shterion/gpu4edu.html)
 
 ## Structure of the Cluster
 The computing cluster consists of multiple **nodes**, which are individual machines equipped with GPUs. These nodes handle all computational tasks. When you run a job, you are effectively requesting time and resources on one or more of these nodes, depending on the complexity of your task. The cluster's management system, SLURM, allocates these nodes to users dynamically.
