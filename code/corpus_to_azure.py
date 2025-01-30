@@ -15,9 +15,11 @@ class BlobUploader:
                     file_path = os.path.join(root, file_name)
                     blob_name = os.path.relpath(file_path, local_directory).replace("\\", "/")
 
-                    with open(file_path, "rb") as data:
-                        print(f"Uploading {file_name} as {blob_name}...")
-                        self.container_client.upload_blob(name=blob_name, data=data, overwrite=True)
+                    # Skip directories and upload files only
+                    if os.path.isfile(file_path):
+                        with open(file_path, "rb") as data:
+                            print(f"Uploading {file_name} as {blob_name}...")
+                            self.container_client.upload_blob(name=blob_name, data=data, overwrite=True)
 
             print("All files uploaded successfully.")
         except Exception as e:
@@ -25,10 +27,10 @@ class BlobUploader:
 
 # Define the connection string and the container name
 connection_string = os.getenv("SONAR_STORAGE_KEY")
-container_name = "press-releases"
+container_name = "magazines"
 
 # Local directory containing the files
-local_directory = "/Users/jonasklein/Library/CloudStorage/OneDrive-Personal/DSS/Thesis/code/SoNaRCorpus_NC_1.2/SONAR500/DCOI/WR-P-E-F_press_releases"
+local_directory = "/Users/jonasklein/Library/CloudStorage/OneDrive-Personal/DSS/Thesis/code/SoNaRCorpus_NC_1.2/SONAR500/DCOI/WR-P-E-C_e-magazines"
 
 # Instantiate the class and upload files
 uploader = BlobUploader(connection_string, container_name)
