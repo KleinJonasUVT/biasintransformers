@@ -6,11 +6,11 @@ This document outlines the methodology for training an encoder-only Transformer 
 
 The training is done following the standard BERT architecture with an MLM head, as illustrated below:
 
-![BERT MLM Overview](https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/colapsed_BERT.png)
+<img src="https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/colapsed_BERT.png" width="400"/>
 
 Additionally, an expanded version of the visual representation is available, providing a more detailed breakdown of the model's components and the ability to reference specific parts of the model:
 
-![Expanded BERT MLM Overview](https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/expanded.png)
+<img src="https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/expanded.png" width="400"/>
 
 The model consists of the following key components:
 - **Tokenizer**: Responsible for preprocessing text by tokenizing sequences and adding special tokens such as `[CLS]`, `[MASK]`, and `[PAD]`.
