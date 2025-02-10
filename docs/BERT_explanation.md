@@ -6,9 +6,9 @@ This document outlines the methodology for training an encoder-only Transformer 
 
 The training is done following the standard BERT architecture with an MLM head, as illustrated below:
 
-<img src="https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/colapsed_BERT.png" width="400"/>
+<img src="https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/colapsed_BERT.png" width="350"/>
 
-Additionally, an expanded version of the visual representation is available, providing a more detailed breakdown of the model's components and the ability to reference specific parts of the model:
+Additionally, an expanded version of the visual representation, providing a more detailed breakdown of the model's components and the ability to reference specific parts of the model:
 
 <img src="https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/expanded.png" width="600"/>
 
