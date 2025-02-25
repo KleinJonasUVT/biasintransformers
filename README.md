@@ -13,7 +13,7 @@ This repository contains the code and analysis for my Data Science & Society the
 
 ## Repository structure
 
-| File                      | Description |
+| File (in code folder)     | Description |
 |---------------------------|------------|
 | `bert.ipynb`             | First experimental code with BERT, not the final script |
 | `corpus_to_azure.py`      | Script to upload parts of the local corpus to Azure |
