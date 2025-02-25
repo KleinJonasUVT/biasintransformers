@@ -10,3 +10,15 @@ This repository contains the code and analysis for my Data Science & Society the
 - **Bias Detection**: Classifiers and SVM tools to identify and quantify gender bias.
 - **Analysis**: Analyzing the evolution and localization of gender bias in embeddings.
 - **Evaluation**: Visualizations and results documenting embedding behaviors and gender localization.
+
+## Repository structure
+
+| File                      | Description |
+|---------------------------|------------|
+| `bert.ipynb`             | First experimental code with BERT, not the final script |
+| `corpus_to_azure.py`      | Script to upload parts of the local corpus to Azure |
+| `data_exploration_lemma.ipynb` | Data exploration at the lemma level (incomplete) |
+| `data_exploration.ipynb`  | Exploratory Data Analysis (EDA) on the corpus |
+| `data_sentences.py`       | Script handling sentence-level data processing |
+| `visualize_results.ipynb` | Visualization of model training results |
+
