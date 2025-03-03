@@ -175,3 +175,5 @@ cython_debug/
 /out
 /outlemma
 **/dataset_creation.ipynb
+downloaded_dataset/
+downloaded_model/
