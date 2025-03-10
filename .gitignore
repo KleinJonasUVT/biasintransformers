@@ -177,3 +177,5 @@ cython_debug/
 **/dataset_creation.ipynb
 downloaded_dataset/
 downloaded_model/
+*.npy
+*.csv
