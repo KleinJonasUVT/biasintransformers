@@ -6,11 +6,11 @@ This document outlines the methodology for training a decoder-only Transformer m
 
 The training follows the standard GPT-2 architecture with an autoregressive LM head, as illustrated below:
 
-<img src="https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/colapsed_GPT2.png" width="350"/>
+<img src="https://github.com/KleinJonasUVT/biasintransformers/blob/b4963d27945a06ac8919a11074d4d41604136e38/assets/images/colapsed_GPT2.png" width="350"/>
 
 Additionally, an expanded version of the visual representation, providing a more detailed breakdown of the model's components and the ability to reference specific parts of the model:
 
-<img src="https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/GPT2.png" width="600"/>
+<img src="https://github.com/KleinJonasUVT/biasintransformers/blob/b4963d27945a06ac8919a11074d4d41604136e38/assets/images/GPT2.png" width="600"/>
 
 The model consists of the following key components:
 - **Tokenizer**: Processes input text using Byte Pair Encoding (BPE), converting it into subword tokens while maintaining spacing explicitly (e.g., `" GPT-2"` tokenizes as `["ĠGPT", "-", "2"]`).
