@@ -1,6 +1,7 @@
 # Training an Encoder-Only Model with an MLM Head for Word Embeddings
 
 This document outlines the methodology for training an encoder-only Transformer model equipped with a Masked Language Model (MLM) head, using the Hugging Face Transformers library. The structure explains the structure also used in the thesis. The primary objective is to extract meaningful word embeddings by training the model from scratch, ensuring that the learned representations are derived solely from the Dutch SONAR corpus.
+GPT2
 
 ## Model Structure
 
@@ -10,7 +11,7 @@ The training is done following the standard BERT architecture with an MLM head, 
 
 Additionally, an expanded version of the visual representation, providing a more detailed breakdown of the model's components and the ability to reference specific parts of the model:
 
-<img src="https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/expanded.png" width="600"/>
+<img src="https://github.com/KleinJonasUVT/biasintransformers/blob/52def7c6f06ae26d41ca9c9c6e1aab9ea9d96c49/assets/images/BERT.png" width="600"/>
 
 The model consists of the following key components:
 - **Tokenizer**: Responsible for preprocessing text by tokenizing sequences and adding special tokens such as `[CLS]`, `[MASK]`, and `[PAD]`.
