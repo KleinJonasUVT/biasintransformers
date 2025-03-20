@@ -14,7 +14,7 @@ from datasets import Dataset
 
 # Set paths
 BASE_DIR = os.path.expanduser("~/gpt2_experiment")
-DATA_PATH = os.path.join(BASE_DIR, "cleaned_books_small.txt")
+DATA_PATH = os.path.join(BASE_DIR, "cleaned_books.txt")
 SAVE_DIR = os.path.join(BASE_DIR, "custom_tokenizer")
 
 # Ensure output directories exist
@@ -32,12 +32,12 @@ tokenizer.train(
     min_frequency=3,
     special_tokens=["<|endoftext|>"]
 )
-tokenizer.save_model(SAVE_DIR, "custom_vocab_small")
+tokenizer.save_model(SAVE_DIR, "custom_vocab")
 
 # --- STEP 2: HUGGING FACE TOKENIZER --- #
 hf_tokenizer = GPT2TokenizerFast(
-    vocab_file=os.path.join(SAVE_DIR, "custom_vocab_small-vocab.json"),
-    merges_file=os.path.join(SAVE_DIR, "custom_vocab_small-merges.txt")
+    vocab_file=os.path.join(SAVE_DIR, "custom_vocab-vocab.json"),
+    merges_file=os.path.join(SAVE_DIR, "custom_vocab-merges.txt")
 )
 hf_tokenizer.add_special_tokens({
     "eos_token": "<|endoftext|>",
@@ -48,94 +48,59 @@ hf_tokenizer.save_pretrained(SAVE_DIR)
 
 hf_tokenizer = AutoTokenizer.from_pretrained(SAVE_DIR, local_files_only=True)
 
-# --- STEP 3: DATASET PREPARATION --- #
+# --- STEP 3: DATASET PREPARATION (TOKENIZE FIRST, THEN SPLIT, THEN CHUNK) --- #
+
+# Read raw text
 with open(DATA_PATH, "r", encoding="utf-8") as f:
     raw_text = f.read()
 
+# Split into books
 books = raw_text.split("### BOOK SEPARATOR ###")
 
-def tokenize_book(text, tokenizer):
-    tokens = tokenizer.encode(text) + [tokenizer.eos_token_id]
-    return tokens
+# Tokenize all books first
+tokenized_books = [hf_tokenizer.encode(book.strip()) + [hf_tokenizer.eos_token_id] for book in books]
 
-def sliding_window(tokens, chunk_size=1024, overlap=512):
-    return [tokens[i:i+chunk_size] for i in range(0, len(tokens)-chunk_size+1, chunk_size-overlap)]
+# Flatten all tokens into a single list
+all_tokens = [token for book in tokenized_books for token in book]
 
-all_chunks = []
-for book_text in books:
-    book_tokens = tokenize_book(book_text.strip(), hf_tokenizer)
-    all_chunks.extend(sliding_window(book_tokens))
+# Define split sizes
+total_tokens = len(all_tokens)
+train_size = int(0.8 * total_tokens)
+valid_size = int(0.1 * total_tokens)
+test_size = total_tokens - train_size - valid_size  # Ensure 100%
 
-print("Total chunks created:", len(all_chunks))
+# Assign tokenized chunks to respective splits
+train_tokens = all_tokens[:train_size]
+valid_tokens = all_tokens[train_size:train_size + valid_size]
+test_tokens = all_tokens[train_size + valid_size:]
 
-dataset = Dataset.from_dict({"input_ids": all_chunks})
+# Function to apply sliding window chunking
+def chunk_tokens(tokens, chunk_size=1024, overlap=512):
+    return [tokens[i:i + chunk_size] 
+            for i in range(0, len(tokens) - chunk_size + 1, chunk_size - overlap)]
 
-# Split dataset
-train_test_split = dataset.train_test_split(test_size=0.2, seed=42)
-valid_test_split = train_test_split["test"].train_test_split(test_size=0.5, seed=42)
-
+# Chunk each dataset separately
 final_datasets = {
-    "train": train_test_split["train"],
-    "validation": valid_test_split["train"],
-    "test": valid_test_split["test"],
+    "train": Dataset.from_dict({"input_ids": chunk_tokens(train_tokens)}),
+    "validation": Dataset.from_dict({"input_ids": chunk_tokens(valid_tokens)}),
+    "test": Dataset.from_dict({"input_ids": chunk_tokens(test_tokens)}),
 }
 
+# Convert to PyTorch format
 for split in final_datasets:
     final_datasets[split].set_format(type="torch", columns=["input_ids"])
 
-print(f'Train size: {len(final_datasets["train"])}')
+# Print dataset sizes
+print(f"Train chunks: {len(final_datasets['train'])}")
+print(f"Validation chunks: {len(final_datasets['validation'])}")
+print(f"Test chunks: {len(final_datasets['test'])}")
 
 # Print the first few examples
 print("First few examples:")
 for i in range(5):
     print(final_datasets["train"][i])
 
-# --- STEP 4: MODEL SETUP --- #
-config = GPT2Config(
-    vocab_size=len(hf_tokenizer),
-    n_embd=768,
-    n_layer=12,
-    n_head=12,
-    n_positions=1024,
-    pad_token_id=hf_tokenizer.pad_token_id,
-)
-
-model = GPT2LMHeadModel(config)
-model.resize_token_embeddings(len(hf_tokenizer))
-model.to(device)
-print(model)
-
-data_collator = DataCollatorForLanguageModeling(
-    tokenizer=hf_tokenizer,
-    mlm=False
-)
-
-# --- STEP 5: TRAINING ARGUMENTS & TRAINING --- #
-training_args = TrainingArguments(
-    output_dir=os.path.join(BASE_DIR, "gpt2_checkpoints"),
-    evaluation_strategy="steps",
-    save_strategy="steps",
-    save_steps=10000,
-    per_device_train_batch_size=8,
-    per_device_eval_batch_size=8,
-    logging_steps=100,
-    num_train_epochs=10,
-    save_total_limit=None,
-    overwrite_output_dir=False,
-    logging_dir=os.path.join(BASE_DIR, "logs"),
-    load_best_model_at_end=True,
-    fp16=True,
-)
-
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=final_datasets["train"],
-    eval_dataset=final_datasets["validation"],
-    tokenizer=hf_tokenizer,
-    data_collator=data_collator,
-)
-
-trainer.train()
-trainer.save_model(os.path.join(BASE_DIR, "gpt2_custom_final"))
-print("Training complete, model saved to:", os.path.join(BASE_DIR, "gpt2_custom_final"))
+# Print the first few examples in decoded form
+print("First few examples in decoded form:")
+for i in range(5):
+    print(hf_tokenizer.decode(final_datasets["train"][i]["input_ids"], skip_special_tokens=True))

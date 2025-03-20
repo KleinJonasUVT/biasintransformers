@@ -4,12 +4,14 @@ from tokenizers import BertWordPieceTokenizer
 from transformers import AutoTokenizer, BertTokenizerFast
 from torch.nn.utils.rnn import pad_sequence
 from nltk.tokenize import sent_tokenize
+from datasets import Dataset, DatasetDict
+import random
 
 # Set paths
 BASE_DIR = os.path.expanduser("~/bert_experiment")
-DATA_PATH = os.path.join(BASE_DIR, "cleaned_books_small.txt")
+DATA_PATH = os.path.join(BASE_DIR, "cleaned_books.txt")
 SAVE_DIR = os.path.join(BASE_DIR, "custom_tokenizer")
-VOCAB_FILE = os.path.join(SAVE_DIR, "custom_vocab_small-vocab.txt")
+VOCAB_FILE = os.path.join(SAVE_DIR, "custom_vocab-vocab.txt")
 
 # Ensure output directories exist
 os.makedirs(SAVE_DIR, exist_ok=True)
@@ -38,7 +40,7 @@ tokenizer.train(
 )
 
 # Save tokenizer in original format
-tokenizer.save_model(SAVE_DIR, "custom_vocab_small")
+tokenizer.save_model(SAVE_DIR, "custom_vocab")
 print("WordPiece tokenizer training complete! Saved to", SAVE_DIR)
 
 ### --- STEP 2: CONVERT TO HUGGING FACE TOKENIZER FORMAT --- ###
@@ -68,111 +70,180 @@ if not os.path.exists(os.path.join(SAVE_DIR, "tokenizer.json")):
 hf_tokenizer = AutoTokenizer.from_pretrained(SAVE_DIR)
 print("Tokenizer loaded successfully!")
 
-### --- STEP 4: READ DATA AND PREVENT BOOK MIXING --- ###
-# Read and split text into books
+# Read books
 with open(DATA_PATH, "r", encoding="utf-8") as f:
     text = f.read()
 
-# The text file consist of multiple books separated by the delimiter defined below, so splitting will work
+# Define book delimiter
 book_delimiter = "\n### BOOK SEPARATOR ###\n"
 books = text.split(book_delimiter)
 
-# print a few examples
 print("Number of books:", len(books))
-print("Number of sentences in first book:", len(sent_tokenize(books[0])))
-print("Number of sentences in second book:", len(sent_tokenize(books[1])))
-print("Number of sentences in third book:", len(sent_tokenize(books[2])))
 
+# Shuffle books for randomness
+random.seed(42)
+random.shuffle(books)
+
+
+### --- STEP 1: Tokenize books & Measure Token Counts --- ###
+def tokenize_books(book_list, tokenizer):
+    """Tokenizes books while respecting sentence boundaries."""
+    tokenized_books = []
+    token_counts = []
+    
+    for book in book_list:
+        sentences = sent_tokenize(book)  # Split into sentences
+        tokenized_sentences = [tokenizer.encode(sent, add_special_tokens=False) for sent in sentences]
+
+        # Flatten list while keeping sentence boundaries
+        tokenized_book = []
+        for sent_tokens in tokenized_sentences:
+            tokenized_book.extend(sent_tokens)
+        
+        tokenized_books.append(tokenized_sentences)  # List of lists
+        token_counts.append(len(tokenized_book))  # Total tokens
+    
+    return tokenized_books, token_counts
+
+tokenized_books, token_counts = tokenize_books(books, hf_tokenizer)
+
+# Compute total tokens
+total_tokens = sum(token_counts)
+train_token_target = int(total_tokens * 0.80)
+val_token_target = int(total_tokens * 0.10)
+test_token_target = int(total_tokens * 0.10)
+
+print(f"Total tokens: {total_tokens}, Train: {train_token_target}, Val: {val_token_target}, Test: {test_token_target}")
+
+
+### --- STEP 2: Split Books While Respecting Token Distribution --- ###
+def split_books_by_token_count(tokenized_books, token_counts, train_target, val_target, test_target):
+    """Splits books while ensuring token-based distribution."""
+    
+    train_books, val_books, test_books = [], [], []
+    train_count, val_count, test_count = 0, 0, 0
+    
+    for book_sentences, count in zip(tokenized_books, token_counts):
+        if train_count + count <= train_target:
+            train_books.append(book_sentences)
+            train_count += count
+        elif val_count + count <= val_target:
+            val_books.append(book_sentences)
+            val_count += count
+        else:
+            test_books.append(book_sentences)
+            test_count += count
+    
+    return train_books, val_books, test_books
+
+train_tokenized, val_tokenized, test_tokenized = split_books_by_token_count(
+    tokenized_books, token_counts, train_token_target, val_token_target, test_token_target
+)
+
+# Verify distributions
+print(f"Final token counts - Train: {sum(len(sum(b, [])) for b in train_tokenized)}, Val: {sum(len(sum(b, [])) for b in val_tokenized)}, Test: {sum(len(sum(b, [])) for b in test_tokenized)}")
+
+
+### --- STEP 3: Chunk While Respecting Sentence Boundaries --- ###
 def find_closest_sentence_start(sentences, tokenizer, target_token_count):
-    """Find the sentence index closest to the target token count"""
+    """Find the closest sentence index that gets us to the target token count."""
     current_token_count = 0
-    for i, sentence in enumerate(sentences):
-        tokenized_sentence = tokenizer.tokenize(sentence)
-        current_token_count += len(tokenized_sentence)
+    for i, sentence_tokens in enumerate(sentences):
+        current_token_count += len(sentence_tokens)
         if current_token_count >= target_token_count:
             return i
-    return len(sentences)
+    return len(sentences)  # Default to end
 
-def chunk_sentences_with_overlap(text, tokenizer, max_length=512):
-    """Split text into overlapping chunks of up to 512 tokens"""
-    sentences = sent_tokenize(text, language="dutch")
-    
-    # Identify starting points for overlapping chunks
-    start_indices = [
-        0,
-        find_closest_sentence_start(sentences, tokenizer, 128),
-        find_closest_sentence_start(sentences, tokenizer, 256),
-        find_closest_sentence_start(sentences, tokenizer, 384)
-    ]
-    
-    all_chunks = []
-    for start_index in start_indices:
-        current_chunk, current_length = [], 2  # Account for [CLS] and [SEP], therefore already having 2 tokens
+def chunk_sentences_respecting_boundaries(tokenized_sentences, tokenizer, max_length=512, stride=384):
+    """Chunk text while ensuring sentence boundaries are respected."""
+    chunks = []
+    start = 0
+
+    while start < len(tokenized_sentences):
+        current_chunk = []
+        current_length = 2  # [CLS] and [SEP]
         
-        for sentence in sentences[start_index:]:
-            tokenized_sentence = tokenizer.tokenize(sentence)
-            sentence_length = len(tokenized_sentence)
+        for i in range(start, len(tokenized_sentences)):
+            sentence_tokens = tokenized_sentences[i]
+            sentence_length = len(sentence_tokens)
 
             if current_length + sentence_length > max_length:
-                # Finalize the current chunk
-                chunk_with_special_tokens = (
-                    [tokenizer.cls_token] + current_chunk + [tokenizer.sep_token]
-                )
-                all_chunks.append(chunk_with_special_tokens)
-                
-                # Start a new chunk
-                current_chunk, current_length = [], 2  # Reset with CLS and SEP tokens
-
-            current_chunk.extend(tokenized_sentence)
+                break  # Stop at the last full sentence before max_length
+            
+            current_chunk.append(sentence_tokens)
             current_length += sentence_length
+        
+        # Flatten and add special tokens
+        chunk = [tokenizer.cls_token_id] + sum(current_chunk, []) + [tokenizer.sep_token_id]
+        chunks.append(chunk)
 
-        if current_chunk:
-            # Add special tokens to the last chunk
-            chunk_with_special_tokens = (
-                [tokenizer.cls_token] + current_chunk + [tokenizer.sep_token]
-            )
-            all_chunks.append(chunk_with_special_tokens)
+        # Move start forward, ensuring overlap
+        start += i - start if i - start > 0 else 1  # Move at least 1 sentence forward
 
-    return all_chunks
+    return chunks
 
-def tokenize_and_pad(chunks, tokenizer, max_length=512):
-    """ 
-    Tokenize and pad a list of chunks using the huggingface tokenizer.
-    """
-    tokenized_chunks = [
-        tokenizer.convert_tokens_to_ids(chunk) for chunk in chunks
-    ]
-    
+# Apply chunking separately for train, val, and test
+train_chunks = sum([chunk_sentences_respecting_boundaries(book, hf_tokenizer) for book in train_tokenized], [])
+val_chunks = sum([chunk_sentences_respecting_boundaries(book, hf_tokenizer) for book in val_tokenized], [])
+test_chunks = sum([chunk_sentences_respecting_boundaries(book, hf_tokenizer) for book in test_tokenized], [])
+
+print(f"Total train chunks: {len(train_chunks)}, Val chunks: {len(val_chunks)}, Test chunks: {len(test_chunks)}")
+
+
+### --- STEP 4: Convert to Dataset Format --- ###
+def create_dataset(chunks, tokenizer):
+    """Converts chunked data into a Dataset object with padding."""
+
     # Pad sequences
     padded_chunks = pad_sequence(
-        [torch.tensor(chunk) for chunk in tokenized_chunks],
+        [torch.tensor(chunk) for chunk in chunks],
         batch_first=True,
         padding_value=tokenizer.pad_token_id
     )
 
-    return padded_chunks
+    return Dataset.from_dict({"input_ids": padded_chunks.tolist()})
 
-# Process all books with overlapping chunks
-all_books_chunks = []
-for book in books:
-    book_chunks = chunk_sentences_with_overlap(book, hf_tokenizer, max_length=512)
-    padded_book_chunks = tokenize_and_pad(book_chunks, hf_tokenizer, max_length=512)
-    all_books_chunks.append(padded_book_chunks)
+train_dataset = create_dataset(train_chunks, hf_tokenizer)
+val_dataset = create_dataset(val_chunks, hf_tokenizer)
+test_dataset = create_dataset(test_chunks, hf_tokenizer)
 
-print("Chunking and tokenization complete!")
-print("Number of books processed:", len(all_books_chunks))
+# Store datasets in a dictionary
+final_datasets = DatasetDict({
+    "train": train_dataset,
+    "validation": val_dataset,
+    "test": test_dataset
+})
 
-# Ensure all chunks have exactly 512 tokens
-flattened_chunks = []
-for book in all_books_chunks:
-    for chunk in book:
-        chunk = chunk[:512]  # Trim if it's too long
-        if len(chunk) < 512:
-            chunk += [0] * (512 - len(chunk))  # Pad if too short
-        flattened_chunks.append(torch.tensor(chunk))
+# Save datasets to disk
+TRAIN_DATA_PATH = os.path.join(BASE_DIR, "train_dataset")
+VALID_DATA_PATH = os.path.join(BASE_DIR, "valid_dataset")
+TEST_DATA_PATH = os.path.join(BASE_DIR, "test_dataset")
 
-# Stack into a single tensor
-all_books_chunks_tensor = torch.stack(flattened_chunks)
+final_datasets["train"].save_to_disk(TRAIN_DATA_PATH)
+final_datasets["validation"].save_to_disk(VALID_DATA_PATH)
+final_datasets["test"].save_to_disk(TEST_DATA_PATH)
 
-# Print the shape
-print(all_books_chunks_tensor.shape)
+print("Datasets saved successfully!")
+
+# Convert datasets to PyTorch format
+for split in final_datasets:
+    final_datasets[split].set_format(type="torch", columns=["input_ids"])
+
+# Read back datasets
+train_dataset = Dataset.load_from_disk(TRAIN_DATA_PATH)
+val_dataset = Dataset.load_from_disk(VALID_DATA_PATH)
+test_dataset = Dataset.load_from_disk(TEST_DATA_PATH)
+
+print("Datasets loaded successfully!")
+
+# Verify dataset shapes
+print("Train dataset size:", len(train_dataset["input_ids"]))
+print("Validation dataset size:", len(val_dataset["input_ids"]))
+print("Test dataset size:", len(test_dataset["input_ids"]))
+
+# Print the first few examples in both tokenized and decoded forms
+print("First few examples:")
+for i in range(5):
+    print("Tokenized:", train_dataset["input_ids"][i])
+    print("Decoded:", hf_tokenizer.decode(train_dataset["input_ids"][i]))
+    print()
