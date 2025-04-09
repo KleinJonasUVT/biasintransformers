@@ -13,12 +13,17 @@ This repository contains the code and analysis for my Data Science & Society the
 
 ## Repository structure
 
-| File (in code folder)     | Description |
-|---------------------------|------------|
-| `bert.ipynb`             | First experimental code with BERT, not the final script |
-| `corpus_to_azure.py`      | Script to upload parts of the local corpus to Azure |
-| `data_exploration_lemma.ipynb` | Data exploration at the lemma level (incomplete) |
-| `data_exploration.ipynb`  | Exploratory Data Analysis (EDA) on the corpus |
-| `data_sentences.py`       | Script handling sentence-level data processing |
-| `visualize_results.ipynb` | Visualization of model training results |
+| File (in code folder)              | Description |
+|-----------------------------------|-------------|
+| `bert.ipynb`                      | First experimental code with BERT, not the final script |
+| `corpus_to_azure.py`             | Script to upload parts of the local corpus to Azure |
+| `data_exploration_lemma.ipynb`   | Data exploration at the lemma level (incomplete) |
+| `data_exploration.ipynb`         | Exploratory Data Analysis (EDA) on the corpus |
+| `data_sentences.py`              | Data preparation for my BERT Model, respecting both book and sentence boundaries |
+| `visualize_results.ipynb`        | Visualization of model training results |
+| `word2vec.py`                    | Training a word2vec model to get static embeddings from our corpus |
+| `results_to_azure.py`            | Script that gets all model results to an Azure container for storage |
+| `test_model.py`                  | Getting test accuracy for pretrained BERT model |
+| `SVM_dataprep_OOP.ipynb`         | Processes multiple words to extract their contextual embeddings from BERT, and saves the results for later use in SVM training |
+| `SVM_BERT_full_dimensions.ipynb` | Training an SVM classifier on embeddings with downsampling embeddings of frequent gendered words, once using all dimensions, once one dimension and once all but the best dimension |
 
