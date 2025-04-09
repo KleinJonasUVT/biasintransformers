@@ -4,14 +4,21 @@ import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 import os
-from gensim.models.callbacks import CallbackAny2Vec
+from io import BytesIO
+from azure.storage.blob import BlobServiceClient
 
 # Set paths
 BASE_DIR = os.path.expanduser("~/word2vec")
 DATA_PATH = os.path.join(BASE_DIR, "cleaned_books.txt")
 
-# Ensure output directories exist
-os.makedirs(BASE_DIR, exist_ok=True)
+# Azure setup
+AZURE_STORAGE_CONNECTION_STRING = os.getenv("SONAR_STORAGE_KEY")
+CONTAINER_NAME = "results"
+BLOB_BASE_DIR = "w2v"
+
+# Initialize blob client
+blob_service_client = BlobServiceClient.from_connection_string(AZURE_STORAGE_CONNECTION_STRING)
+container_client = blob_service_client.get_container_client(CONTAINER_NAME)
 
 # Ensure required NLTK models are downloaded
 nltk.download("punkt")
@@ -26,51 +33,76 @@ with open(DATA_PATH, "r", encoding="utf-8") as f:
 book_delimiter = "\n### BOOK SEPARATOR ###\n"
 books = text.split(book_delimiter)
 
-# Improved preprocessing: Tokenize, remove stopwords, lowercase, filter non-alpha tokens
+# Preprocess text
 tokenized_sentences = []
 for book in books:
     sentences = sent_tokenize(book)
     for sent in sentences:
         words = [word.lower() for word in word_tokenize(sent) if word.isalpha() and word.lower() not in stop_words]
-        if words:  # ensure sentence is not empty after filtering
+        if words:
             tokenized_sentences.append(words)
 
 print(f"Total tokenized sentences after filtering: {len(tokenized_sentences)}")
 
-class EpochLogger(CallbackAny2Vec):
-    """Callback to log loss after each epoch."""
-    def __init__(self):
-        self.epoch = 0
-        self.previous_loss = 0
+# Word2Vec training parameters
+vector_size = 200
+window = 8
+min_count = 5
+workers = 4
+epochs = 20
+sub_epoch_fraction = 0.05  # 5%
 
-    def on_epoch_end(self, model):
-        loss = model.get_latest_training_loss()
-        current_loss = loss - self.previous_loss if self.epoch > 0 else loss
-        print(f"Loss after epoch {self.epoch}: {current_loss}")
-        self.previous_loss = loss
-        self.epoch += 1
-
-# Initialize the loss logger
-epoch_logger = EpochLogger()
-
-# Train improved Word2Vec model
+# Reinitialize model
 word2vec_model = Word2Vec(
-    sentences=tokenized_sentences,
-    vector_size=200,
-    window=8,
-    min_count=5,
-    workers=4,
+    vector_size=vector_size,
+    window=window,
+    min_count=min_count,
+    workers=workers,
     sg=1,
-    epochs=20,
-    compute_loss=True, 
-    callbacks=[epoch_logger]
 )
 
-# Save the model
-WORD2VEC_SAVE_PATH = os.path.join(BASE_DIR, "word2vec_model")
+# Build vocabulary
+word2vec_model.build_vocab(tokenized_sentences)
+print("Vocabulary built.")
 
-os.makedirs(os.path.dirname(WORD2VEC_SAVE_PATH), exist_ok=True)
+# How many sub-updates per epoch (20 updates per epoch = 5% intervals)
+num_updates = int(1 / sub_epoch_fraction)
 
-word2vec_model.save(WORD2VEC_SAVE_PATH)
+# Start training in 5% chunks
+for epoch in range(epochs):
+    print(f"\nEpoch {epoch+1}/{epochs}")
+    for i in range(num_updates):
+        start = int(i * len(tokenized_sentences) / num_updates)
+        end = int((i + 1) * len(tokenized_sentences) / num_updates)
+        partial_sentences = tokenized_sentences[start:end]
 
-print(f"Improved Word2Vec model trained and saved at: {WORD2VEC_SAVE_PATH}")
+        word2vec_model.train(
+            partial_sentences,
+            total_examples=len(partial_sentences),
+            epochs=1
+        )
+
+        # Save model to BytesIO buffer
+        buffer = BytesIO()
+        word2vec_model.save(buffer)
+        buffer.seek(0)
+
+        # Construct path: w2v/epoch{epoch+1}_part{i+1}/model
+        subfolder = f"epoch{epoch+1}_part{i+1}"
+        blob_path = f"{BLOB_BASE_DIR}/{subfolder}/model"
+
+        # Upload buffer to Azure Blob
+        blob_client = container_client.get_blob_client(blob_path)
+        blob_client.upload_blob(buffer, overwrite=True)
+
+        print(f"Checkpoint uploaded to Azure: {blob_path}")
+
+# Save final model
+final_buffer = BytesIO()
+word2vec_model.save(final_buffer)
+final_buffer.seek(0)
+final_blob_path = f"{BLOB_BASE_DIR}/final/model"
+final_blob_client = container_client.get_blob_client(final_blob_path)
+final_blob_client.upload_blob(final_buffer, overwrite=True)
+
+print(f"\nFinal Word2Vec model uploaded to Azure: {final_blob_path}")
