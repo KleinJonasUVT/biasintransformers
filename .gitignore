@@ -182,3 +182,4 @@ downloaded_model_1000/
 *.npy
 *.csv
 *.json
+*azure_model
