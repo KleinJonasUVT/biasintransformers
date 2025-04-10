@@ -25,5 +25,7 @@ This repository contains the code and analysis for my Data Science & Society the
 | `results_to_azure.py`            | Script that gets all model results to an Azure container for storage |
 | `test_model.py`                  | Getting test accuracy for pretrained BERT model |
 | `SVM_dataprep_OOP.ipynb`         | Processes multiple words to extract their contextual embeddings from BERT, and saves the results for later use in SVM training |
-| `SVM_BERT_full_dimensions.ipynb` | Training an SVM classifier on embeddings with downsampling embeddings of frequent gendered words, once using all dimensions, once one dimension and once all but the best dimension |
+| `SVM_BERT_full.ipynb` | Training an SVM classifier on embeddings with downsampling embeddings of frequent gendered words, using all dimensions |
+| `SVM_BERT_full_dimensions.ipynb` | Training an SVM classifier on embeddings with downsampling embeddings of frequent gendered words, once using one dimension and once all but the best dimension |
+| `professions_sentences.ipynb` | Constructs "[gendered_word] is een [profession]" sentences for all gendered word–profession combinations, feeds them through the BERT model, and extracts the contextual embeddings for the profession in each sentence. Used to analyze how profession words are embedded in gendered contexts. |
 
