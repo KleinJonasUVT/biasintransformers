@@ -183,3 +183,4 @@ downloaded_model_1000/
 *.csv
 *.json
 *azure_model
+*.joblib
