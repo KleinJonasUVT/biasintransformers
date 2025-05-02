@@ -2,6 +2,10 @@
 
 This repository contains the code and analysis for my Data Science & Society thesis on detecting and quantifying gender bias in Dutch word embeddings. The project leverages a BERT Transformer model to track gender representation in embeddings, employing SVM-derived gender subspaces to analyze localization and evolution of biases over time. The research uses the SoNaR-corpus.
 
+![Bert&Ernie](assets/images/Bert&Ernie.JPG)
+
+## Data pipeline
+
 ![Data Pipeline](assets/images/DataPipeline.png)
 
 ## Contents
