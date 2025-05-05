@@ -6,7 +6,7 @@ This repository contains the code and analysis for my Data Science & Society the
 
 ## Data pipeline
 
-![Data Pipeline](assets/images/flowchart.pdf)
+![Data Pipeline](assets/images/flowchart.png)
 
 ## Contents
 - **Data Preprocessing**: Scripts for preparing the SoNaR-corpus, including tokenization and cleaning.
