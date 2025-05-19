@@ -51,7 +51,7 @@ biasintransformers/
 
 ---
 
-## <i class="fa-regular fa-folder-open"></i> Code File Descriptions
+## 📂 Code File Descriptions
 
 | File (in code folder)            | Description                                                                                                               |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
