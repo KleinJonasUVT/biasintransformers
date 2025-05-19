@@ -1,6 +1,6 @@
 # Is She Even Relevant? When BERT Ignores Explicit Gender Cues
 
-## 📚 Thesis Code Repository
+## Thesis Code Repository
 
 This repository contains the full codebase and analysis pipeline for the thesis:
 
@@ -10,7 +10,7 @@ This repository contains the full codebase and analysis pipeline for the thesis:
 
 ---
 
-## 🧠 Abstract
+## Abstract
 
 If a model knows what a plumber is but always imagines him as a man, what exactly does it __know__? This project investigates the emergence and encoding of gender bias in a Dutch BERT model trained from scratch on the SoNaR-500 corpus. Through extracting contextual embeddings at different training checkpoints and constructing dynamic SVM-based gender subspaces, we track how the model learns and encodes gender. Our findings show that stereotypical associations dominate over contextual gender cues—even in cases where explicit morphology or syntax contradicts them.
 
@@ -24,7 +24,7 @@ If a model knows what a plumber is but always imagines him as a man, what exactl
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 biasintransformers/
@@ -51,7 +51,7 @@ biasintransformers/
 
 ---
 
-## 📂 Code File Descriptions
+## Code File Descriptions
 
 | File (in code folder)            | Description                                                                                                               |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
