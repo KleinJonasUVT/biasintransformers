@@ -5,6 +5,7 @@
 This repository contains the full codebase and analysis pipeline for the thesis:
 
 **"Is *She* Even Relevant? When BERT Ignores Explicit Gender Cues"**
+
 *by Jonas Klein, Tilburg University, 2025*
 
 ---
