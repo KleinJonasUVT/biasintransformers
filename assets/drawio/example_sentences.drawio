@@ -1,0 +1,121 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" version="27.0.5">
+  <diagram id="iwKGWvCzSQ0zcwTSH4pr" name="Page-1">
+    <mxGraphModel dx="1186" dy="544" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1200" pageHeight="1920" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="1f1MsIEQNaVEx3Jx2zwc-116" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-10" y="40" width="590" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="Qm7c6p9Z-0uuB-gT3NDW-142" value="De &lt;font style=&quot;color: rgb(135, 87, 154);&quot;&gt;vrouw&lt;/font&gt;&amp;nbsp;is een verpleger&lt;div&gt;&lt;font style=&quot;color: rgb(128, 128, 128);&quot;&gt;(The woman is a nurse)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="390" y="160" width="185" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="Qm7c6p9Z-0uuB-gT3NDW-143" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;De &lt;/font&gt;&lt;font style=&quot;color: rgb(135, 87, 154);&quot;&gt;vrouw&lt;/font&gt; is een directeur&lt;div&gt;&lt;font style=&quot;color: rgb(128, 128, 128);&quot;&gt;(The woman is a director)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="390" y="200.5" width="185" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="Qm7c6p9Z-0uuB-gT3NDW-144" value="De &lt;font style=&quot;color: rgb(204, 102, 0);&quot;&gt;man&lt;/font&gt; is een directeur&lt;div&gt;&lt;font style=&quot;color: rgb(128, 128, 128);&quot;&gt;(The man is a director)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="390" y="80" width="185" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="Qm7c6p9Z-0uuB-gT3NDW-145" value="&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;De &lt;/font&gt;&lt;font style=&quot;color: light-dark(rgb(204, 102, 0), rgb(237, 237, 237));&quot;&gt;man&lt;/font&gt; is een verpleger&lt;div&gt;&lt;font style=&quot;color: rgb(128, 128, 128);&quot;&gt;(The man is a nurse)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="390" y="120" width="185" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="93" value="Neutral-ending" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);" parent="1" vertex="1">
+          <mxGeometry x="127.5" y="82.5" width="85" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="94" value="Neutral-ending" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);" parent="1" vertex="1">
+          <mxGeometry x="127.5" y="122.5" width="85" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="84" value="Anti-stereotypical" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#81b365, #ededed);" parent="1" vertex="1">
+          <mxGeometry x="250" y="122.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="9gb6EuRWjMxYrqQdAa9b-90" value="Pro-stereotypical" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#6c8ebf, #ededed);" parent="1" vertex="1">
+          <mxGeometry x="250" y="82.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="96" value="De &lt;font style=&quot;color: rgb(135, 87, 154);&quot;&gt;vrouw&lt;/font&gt;&amp;nbsp;is een verpleeg&lt;font style=&quot;color: rgb(135, 87, 154);&quot;&gt;ster&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(128, 128, 128);&quot;&gt;(The woman is a nurse)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="390" y="242.5" width="185" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="97" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;De &lt;/font&gt;&lt;font style=&quot;color: rgb(135, 87, 154);&quot;&gt;vrouw&lt;/font&gt; is een direct&lt;font style=&quot;color: rgb(135, 87, 154);&quot;&gt;rice&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(128, 128, 128);&quot;&gt;(The woman is a director)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="390" y="282.5" width="185" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="98" value="Male" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#cc6502, #ededed);" parent="1" vertex="1">
+          <mxGeometry x="-5" y="82.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="99" value="Male" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#cc6502, #ededed);" parent="1" vertex="1">
+          <mxGeometry x="-5" y="122.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="100" value="Female" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#87579A,#EDEDED);labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="-5" y="162.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="101" value="TARGET gender" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="-10" y="40" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="102" value="ATTRIBUTE ending" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="110" y="40" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="103" value="Stereotype alignment" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="240" y="40" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="104" value="Example sentence" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="417.5" y="40" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="105" value="Female" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#87579A,#EDEDED);labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="-5" y="203" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="106" value="Female" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#87579A,#EDEDED);labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="-5" y="245" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="107" value="Neutral-ending" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);" parent="1" vertex="1">
+          <mxGeometry x="127.5" y="162.5" width="85" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="108" value="Neutral-ending" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);" parent="1" vertex="1">
+          <mxGeometry x="127.5" y="203" width="85" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="109" value="Anti-stereotypical" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#81b365, #ededed);" parent="1" vertex="1">
+          <mxGeometry x="250" y="203" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="110" value="Pro-stereotypical" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#6c8ebf, #ededed);" parent="1" vertex="1">
+          <mxGeometry x="250" y="162.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="111" value="Female-ending" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#87579A,#EDEDED);" parent="1" vertex="1">
+          <mxGeometry x="127.5" y="245" width="85" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="112" value="Female-ending" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#87579A,#EDEDED);" parent="1" vertex="1">
+          <mxGeometry x="127.5" y="285" width="85" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="113" value="Anti-stereotypical" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#81b365, #ededed);" parent="1" vertex="1">
+          <mxGeometry x="250" y="285" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="114" value="Pro-stereotypical" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#6c8ebf, #ededed);" parent="1" vertex="1">
+          <mxGeometry x="250" y="245" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="115" value="Female" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#87579A,#EDEDED);labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="-5" y="285" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="116" value="" style="endArrow=none;html=1;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint y="70" as="sourcePoint" />
+            <mxPoint x="580" y="70" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1f1MsIEQNaVEx3Jx2zwc-117" value="(1)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);" vertex="1" parent="1">
+          <mxGeometry x="-10" y="82.5" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1f1MsIEQNaVEx3Jx2zwc-118" value="(2)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);" vertex="1" parent="1">
+          <mxGeometry x="-10" y="122.5" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1f1MsIEQNaVEx3Jx2zwc-119" value="(3)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);" vertex="1" parent="1">
+          <mxGeometry x="-10" y="163" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1f1MsIEQNaVEx3Jx2zwc-120" value="(4)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);" vertex="1" parent="1">
+          <mxGeometry x="-10" y="203" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1f1MsIEQNaVEx3Jx2zwc-121" value="(5)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);" vertex="1" parent="1">
+          <mxGeometry x="-10" y="245" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1f1MsIEQNaVEx3Jx2zwc-122" value="(6)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=light-dark(#000000,#EDEDED);" vertex="1" parent="1">
+          <mxGeometry x="-10" y="285" width="20" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

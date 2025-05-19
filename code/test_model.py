@@ -101,9 +101,11 @@ data_collator = DataCollatorForLanguageModeling(
 # Define training arguments
 training_args = TrainingArguments(
     output_dir=BASE_LOCAL_PATH,
+    evaluation_strategy="epoch",
     per_device_eval_batch_size=8,
     dataloader_drop_last=False,
-    report_to="none"
+    report_to="none",
+    logging_dir=os.path.join(BASE_LOCAL_PATH, "logs")
 )
 
 # Create trainer
